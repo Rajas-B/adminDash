@@ -1,0 +1,97 @@
+{% extends "dashBoard/layout.html" %}
+
+{% load static %}
+{% block body %}
+  <main>
+    <section>
+      <div class="container">
+        <form>
+          <div class="form-row" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group col-md-6">
+              <label for="inputName">Name</label>
+              <input type="text" name="patient_name" class="form-control" id="name" placeholder="Patient's name" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="phone">Phone Number</label>
+              <input type="phone" name="phone" class="form-control" id="phone" placeholder="Phone Number" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputName">Your name</label>
+              <input type="text" name="name" class="form-control" id="name" placeholder="Leave blank if you are the patient">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="phone">Relation to patient</label>
+              <input type="text" name="rel_to_patient" class="form-control" id="phone" placeholder="Leave blank if you are the patient">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputName">Email</label>
+              <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="phone">Aadhar Card Number</label>
+              <input type="text" name="aadhar" class="form-control" id="aadhar" placeholder="Aadhar card number">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <div class="custom-file">
+                <input type="file" name="main_pic" class="custom-file-input" id="customFile" required>
+                <label class="custom-file-label" for="customFile">Upload picture to be displayed on front page</label>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <div class="custom-file">
+                <input type="file" name="other_pics" class="custom-file-input" id="customFile" multiple>
+                <label class="custom-file-label" for="customFile">Upload other pictures</label>
+              </div>
+            </div>
+          
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <div class="custom-file">
+                <input type="file" name="medical_report" class="custom-file-input" id="customFile" multiple required>
+                <label class="custom-file-label" for="customFile">Upload medical report picture</label>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <div class="custom-file">
+                <input type="file" name="operation_bill" class="custom-file-input" id="customFile" multiple required>
+                <label class="custom-file-label" for="customFile">Upload picture of operation bill</label>
+              </div>
+            </div>
+          
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputName">Amount to needed (min Rs.2000)</label>
+              <input type="number" min="2000" name="amount_needed" class="form-control" id="name" placeholder="In rupees" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="phone">URL of campaign video</label>
+              <input type="text" name="video_url" class="form-control" id="phone" placeholder="Should be a YouTube video" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="description">Description</label>
+              <textarea name="description" class="form-control" id="description" rows="3"></textarea>
+            </div>
+          </div>
+          
+          <div class="form-group">
+          </div>
+          <input type="submit" class="btn btn-primary" value="Proceed to consent form" />
+          <p class="text-muted">* An OTP will be sent to your phone number</p>
+        </form>
+      </div>
+    </section>
+    
+    
+  </main>
+{% endblock %}

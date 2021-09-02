@@ -1,0 +1,41 @@
+{% extends "dashBoard/layout.html" %}
+{% block body %}
+    <main>
+        <section>
+            <div class="container">
+                <div class="section-title">
+                    <p><br>CONSENT LETTER FROM MEDI ANGELS</p>
+                </div>
+                <p>
+                <ol>
+                  <li>
+                    I voluntarily hereby agree to donate a regular amount every month for a good cause to CanceRX Foundation
+                  </li>
+                  <li>
+                    I understand that the funds will be used for the treatment of the under privileged  Cancer patients in need with prior validation by CanceRX Foundation.
+                  </li>
+                  <li>
+                    I understand that CanceRX Foundation will not save my payment details however the same may be saved by the secure gateway(S) with may prior consent.
+                  </li>
+                  <li>
+                    I understand that CanceRX Foundation with maintain complete transparency in sharing the details of the funds utilization from time to time on request.
+                  </li>
+                  <li>
+                    I understand that it will be upto CanceRX Foundation to make decisions on funds utilization for which they will be the final authority.
+                  </li>
+                  
+                </ol>
+                </p>
+                <form action="{% url 'mediangel_consent' %}" class="form-signup" method="post">
+                  {% csrf_token %}
+                    <input type="text" style="width: 20%;" name="otp_confirm" class="form-control" placeholder="Enter OTP received" required="" autofocus />
+                    {{ otp }}
+                    <input type="submit" value="Proceed" class="btn btn-primary"/>
+                </form>
+            </div>
+        
+        
+                
+          </section>
+    </main>
+{% endblock %}
