@@ -35,5 +35,5 @@ def unique_campaign_name_generator(instance, new_slug=None):
         new_slug = "{slug}-{randstr}".format(
             slug = slug[:max_length-5], randstr = random_string_generator(size = 4))
              
-        return unique_slug_generator(instance, new_slug = new_slug)
+        return unique_campaign_name_generator(instance, new_slug = new_slug)
     return slug

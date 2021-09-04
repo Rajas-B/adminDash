@@ -373,7 +373,7 @@
     var regex=/^\d{10}$/;
     if(regex.test(phone)===false){
       alert("Enter a valid phone number");
-      error = false;
+      error = true;
     }
     if(password != password_confirm){
       alert("Passwords don't match");
