@@ -132,6 +132,9 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
+STRIPE_PUBLIC_KEY = ""
+STRIPE_PRIVATE_KEY = "sk_test_51JSc3iSHZnj3dlbcQLy8C6IvDKAfCqjudU2H4UayYPZF65LcS2A8GliZlK5OqwHRuWt3cugZpjaKEKPtTT3shS4D00QP2ooIn6"
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]

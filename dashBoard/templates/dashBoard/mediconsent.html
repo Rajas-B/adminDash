@@ -29,7 +29,6 @@
                 <form action="{% url 'mediangel_consent' %}" class="form-signup" method="post">
                   {% csrf_token %}
                     <input type="text" style="width: 20%;" name="otp_confirm" class="form-control" placeholder="Enter OTP received" required="" autofocus />
-                    {{ otp }}
                     <input type="submit" value="Proceed" class="btn btn-primary"/>
                 </form>
             </div>

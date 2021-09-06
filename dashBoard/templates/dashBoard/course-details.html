@@ -22,9 +22,9 @@
         <p>
           <h4>Top Donors:</h4>
           <ol>
-            <li>Person A</li>
-            <li>Person B</li>
-            <li>Person C</li>
+            {% for donor in top_donors %}
+            <li>{{ donor.name }} donated Rs. {{ donor.amount }}</li>
+            {% endfor %}
           </ol>
         </p>
       </div>
@@ -39,10 +39,13 @@
           <h5>Amount to be raised</h5>
           <p>Rs. {{ fundraiser.amount_needed }}</p>
         </div>
-
+        <div class="course-info d-flex justify-content-between align-items-center">
+          <h5>Amount raised</h5>
+          <p>Rs. {{ fundraiser.amount_raised }}</p>
+        </div>
         <div class="course-info d-flex justify-content-between align-items-center">
           <h5>No of people donated</h5>
-          <p>30</p>
+          <p>{{ donations }}</p>
         </div>
 
         <div class="course-info d-flex justify-content-between align-items-center">
@@ -60,7 +63,13 @@
 
   </div>
 </section><!-- End Cource Details Section -->
-
+    <section>
+      <div class="container align-items-center">
+        <iframe width="420" height="315"
+        src="{{ fundraiser.video_url }}">
+        </iframe> 
+      </div>
+    </section>
     <section>
       <!-- Gallery -->
       <div class="container">
@@ -95,82 +104,250 @@
                       <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
                           <!-- Credit card form tabs -->
                           <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
-                              <li class="nav-item"> <a data-toggle="pill" href="#credit-card" class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card </a> </li>
-                              <li class="nav-item"> <a data-toggle="pill" href="#paypal" class="nav-link "> <i class="fab fa-paypal mr-2"></i> Paypal </a> </li>
-                              <li class="nav-item"> <a data-toggle="pill" href="#net-banking" class="nav-link "> <i class="fas fa-mobile-alt mr-2"></i> Net Banking </a> </li>
+                            
                           </ul>
                       </div> <!-- End -->
+                      {% if donor %}
+                      <div class="tab-content">
+                        <!-- credit card info-->
+                        <div id="credit-card" class="tab-pane fade show active pt-3">
+                            <form role="form" name="mediangel_pay" onclick="checkMedi()" method="POST" action="{% url 'create_checkout_medisession' %}">
+                            {% csrf_token %}
+                                <input type="text" style="display: none;" value="{{ fundraiser.id }}" name="fundraiser"/>
+                                   <div class="form-group"> <label for="phone">
+                                    <h6>Phone number</h6>
+                                  </label> <input type="text" name="phone" id="medi_phone" placeholder="Confirm phone number" required class="form-control ">
+                                 </div>
+                                  <div class="form-row"> <label for="amount_paying">
+                                    <h6>Amount: </h6>
+                                </label> 
+                                <div class="form-group col-md-3">
+                                  <input type="radio" name="amount_paying" value="500" required> 
+                                  <label for="Rs. 500">Rs. 500</label>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input type="radio" name="amount_paying" value="1000">
+                                  <label for="Rs. 1000">Rs. 1000</label>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input type="radio" name="amount_paying" value="2000">
+                                <label for="Rs. 2000">Rs. 2000</label>
+                                </div>
+                                  </div>
+                                  <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                      <input type="radio" name="amount_paying" value="custom_amount" id="custom_amount">
+                                    <label for="custom_amount">Custom amount: </label>
+                                    </div>
+                                    <div class="form-group col-md-7">
+                                      <input type="text" name="custom_value" id="custom_value" disabled />
+                                    </div>
+
+                                </div>
+                                
+                                
+                              </div>
+                              <div class="card-footer"> <button type="button" id="checkout-button" onclick="validateMediForm()" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
+
+                                </form>
+                        </div>
+                    </div> <!-- End -->
+                      {% else %}
                       <!-- Credit card form content -->
                       <div class="tab-content">
                           <!-- credit card info-->
                           <div id="credit-card" class="tab-pane fade show active pt-3">
-                              <form role="form" onsubmit="event.preventDefault()">
+                              <form role="form" name="payment" onclick="check()" method="POST" action="{% url 'create_checkout_session' %}">
+                              {% csrf_token %}
+                                  <input type="text" style="display: none;" value="{{ fundraiser.id }}" name="fundraiser"/>
                                   <div class="form-group"> <label for="username">
-                                          <h6>Card Owner</h6>
-                                      </label> <input type="text" name="username" placeholder="Card Owner Name" required class="form-control "> </div>
-                                  <div class="form-group"> <label for="cardNumber">
-                                          <h6>Card number</h6>
-                                      </label>
-                                      <div class="input-group"> <input type="text" name="cardNumber" placeholder="Valid card number" class="form-control " required>
-                                          <div class="input-group-append"> <span class="input-group-text text-muted"> <i class="fab fa-cc-visa mx-1"></i> <i class="fab fa-cc-mastercard mx-1"></i> <i class="fab fa-cc-amex mx-1"></i> </span> </div>
-                                      </div>
+                                          <h6>Name of donor</h6>
+                                      </label> <input type="text" name="name" placeholder="Optional" required class="form-control ">
+                                     </div>
+                                     <div class="form-group"> <label for="phone">
+                                      <h6>Phone number</h6>
+                                    </label> <input type="text" name="phone" id="phone" placeholder="Enter valid phone number" required class="form-control ">
+                                   </div>
+                                   <div class="form-group"> <label for="email">
+                                    <h6>Email address</h6>
+                                  </label> <input type="email" name="email" placeholder="Enter valid email ID" required class="form-control" required>
+                                 </div>
+                                 <div class="form-row">
+                                  <div class="col-md-11"> <label for="consent">
+                                    CancerX will notify you about new fundraisers through your email ID: 
+                                  </label></div><div class="col-md-1"><input type="checkbox" checked name="consent" required disabled>
+                                 </div>
+                                 </div>
+                                 
+                                    <div class="form-row"> <label for="amount_paying">
+                                      <h6>Amount: </h6>
+                                  </label> 
+                                  <div class="form-group col-md-3">
+                                    <input type="radio" name="amount_paying" value="500" required> 
+                                    <label for="Rs. 500">Rs. 500</label>
                                   </div>
-                                  <div class="row">
-                                      <div class="col-sm-8">
-                                          <div class="form-group"> <label><span class="hidden-xs">
-                                                      <h6>Expiration Date</h6>
-                                                  </span></label>
-                                              <div class="input-group"> <input type="number" placeholder="MM" name="" class="form-control" required> <input type="number" placeholder="YY" name="" class="form-control" required> </div>
-                                          </div>
-                                      </div>
-                                      <div class="col-sm-4">
-                                          <div class="form-group mb-4"> <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
-                                                  <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
-                                              </label> <input type="text" required class="form-control"> </div>
-                                      </div>
+                                  <div class="form-group col-md-3">
+                                    <input type="radio" name="amount_paying" value="1000">
+                                    <label for="Rs. 1000">Rs. 1000</label>
                                   </div>
-                                  <div class="card-footer"> <button type="button" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
-                              </form>
+                                  <div class="form-group col-md-3">
+                                    <input type="radio" name="amount_paying" value="2000">
+                                  <label for="Rs. 2000">Rs. 2000</label>
+                                  </div>
+                                    </div>
+                                    <div class="form-row">
+                                      <div class="form-group col-md-5">
+                                        <input type="radio" name="amount_paying" value="custom_amount" id="custom_amount">
+                                      <label for="custom_amount">Custom amount: </label>
+                                      </div>
+                                      <div class="form-group col-md-7">
+                                        <input type="number" name="custom_value" id="custom_value" disabled />
+                                      </div>
+
+                                  </div>
+                                  
+                                  
+                                </div>
+                                <div class="card-footer"> <button type="button" id="checkout-button" onclick="validateForm()" class="subscribe btn btn-primary btn-block shadow-sm"> Confirm Payment </button>
+
+                                  </form>
                           </div>
                       </div> <!-- End -->
-                      <!-- Paypal info -->
-                      <div id="paypal" class="tab-pane fade pt-3">
-                          <h6 class="pb-2">Select your paypal account type</h6>
-                          <div class="form-group "> <label class="radio-inline"> <input type="radio" name="optradio" checked> Domestic </label> <label class="radio-inline"> <input type="radio" name="optradio" class="ml-5">International </label></div>
-                          <p> <button type="button" class="btn btn-primary "><i class="fab fa-paypal mr-2"></i> Log into my Paypal</button> </p>
-                          <p class="text-muted"> Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
-                      </div> <!-- End -->
-                      <!-- bank transfer info -->
-                      <div id="net-banking" class="tab-pane fade pt-3">
-                          <div class="form-group "> <label for="Select Your Bank">
-                                  <h6>Select your Bank</h6>
-                              </label> <select class="form-control" id="ccmonth">
-                                  <option value="" selected disabled>--Please select your Bank--</option>
-                                  <option>Bank 1</option>
-                                  <option>Bank 2</option>
-                                  <option>Bank 3</option>
-                                  <option>Bank 4</option>
-                                  <option>Bank 5</option>
-                                  <option>Bank 6</option>
-                                  <option>Bank 7</option>
-                                  <option>Bank 8</option>
-                                  <option>Bank 9</option>
-                                  <option>Bank 10</option>
-                              </select> </div>
-                          <div class="form-group">
-                              <p> <button type="button" class="btn btn-primary "><i class="fas fa-mobile-alt mr-2"></i> Proceed Payment</button> </p>
-                          </div>
-                          <p class="text-muted">Note: After clicking on the button, you will be directed to a secure gateway for payment. After completing the payment process, you will be redirected back to the website to view details of your order. </p>
-                      </div> <!-- End -->
+                      
                       <!-- End -->
+                      {% endif %}
                   </div>
               </div>
           </div>
       </div>
 
   </div>
-
   </main><!-- End #main -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+
+  <script>
+    function check(){
+      var amount_value = document.payment.amount_paying.value;
+      var custom_value = document.payment.custom_value;
+      var checkoutButton = document.getElementById('checkout-button');
+      if(amount_value === "custom_amount"){
+        custom_value.disabled = false;
+        custom_value.required = true;
+      }
+      else{
+        custom_value.disabled = true;
+        custom_value.required = false;
+      }
+    }
+    function checkMedi(){
+      var amount_value = document.mediangel_pay.amount_paying.value;
+      var custom_value = document.mediangel_pay.custom_value;
+      var checkoutButton = document.getElementById('checkout-button');
+      if(amount_value === "custom_amount"){
+        custom_value.disabled = false;
+        custom_value.required = true;
+      }
+      else{
+        custom_value.disabled = true;
+        custom_value.required = false;
+      }
+    }
+    function validateMediForm(){
+      var phone = document.getElementById("medi_phone").value;
+      var amount = document.mediangel_pay.amount_paying.value;
+      var final_amount = document.mediangel_pay.custom_value;
+      var custom_amount = document.mediangel_pay.custom_value.value;
+      var error = false;
+      if(phone != "{{ phone_number }}"){
+        alert("Please enter the right phone number")
+        error=true;
+      }
+      if(amount != ""){
+        if(amount === "custom_amount"){
+          if(custom_amount === ""){
+            alert("Choose an amount to donate");
+            error = true;
+          }
+        }
+      }else{
+        error = true;
+      }
+      if(error===false){
+        document.mediangel_pay.submit();
+      }
+    }
+    function validateForm(){
+      var name = document.payment.name.value;
+      var phone = document.getElementById("phone").value;
+      var amount = document.payment.amount_paying.value;
+      var final_amount = document.payment.custom_value;
+      var custom_amount = document.payment.custom_value.value;
+      var error = false;
+      if(name != ""){
+        if(!name.match(/^[a-zA-Z ]*$/)){
+          alert("Enter a valid name");
+          error = true;
+        }
+      }
+      if(phone.match(/^\d{10}$/) == null){
+          alert("Enter a valid phone number");
+          error = true;
+        }
+      if(amount != ""){
+        if(amount === "custom_amount"){
+          if(custom_amount === ""){
+            alert("Choose an amount to donate");
+            error = true;
+          }
+        }
+      }else{
+        error = true;
+      }
+      if(error===false){
+        document.payment.submit();
+      }else{
+        return false;
+      }
+    }
+
+    var slideIndex = 1;
+    showSlides(slideIndex);
+    
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+    
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+    
+    function showSlides(n) {
+      var i;
+      var slides = document.getElementsByClassName("mySlides");
+      var dots = document.getElementsByClassName("dot");
+      if (n > slides.length) {slideIndex = 1}    
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";  
+      }
+      for (i = 0; i < dots.length; i++) {
+          dots[i].className = dots[i].className.replace(" active_img", "");
+      }
+      slides[slideIndex-1].style.display = "block";  
+      dots[slideIndex-1].className += " active_img";
+    }
+    </script>
+  <script type="text/javascript">
+  /* checkoutButton.addEventListener("click", function(){
+    var amount_paying = document.paying.amount_paying.value;
+    if(amount_paying === 'custom_amount'){
+      amount_paying = document.paying.custom_value.value;
+    }
+    
+  })*/
+
+  </script>
   <style>
     body {
     background: #f5f5f5
@@ -294,32 +471,5 @@
 $('[data-toggle="tooltip"]').tooltip()
 })
   </script>
-  <script>
-    var slideIndex = 1;
-    showSlides(slideIndex);
-    
-    function plusSlides(n) {
-      showSlides(slideIndex += n);
-    }
-    
-    function currentSlide(n) {
-      showSlides(slideIndex = n);
-    }
-    
-    function showSlides(n) {
-      var i;
-      var slides = document.getElementsByClassName("mySlides");
-      var dots = document.getElementsByClassName("dot");
-      if (n > slides.length) {slideIndex = 1}    
-      if (n < 1) {slideIndex = slides.length}
-      for (i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";  
-      }
-      for (i = 0; i < dots.length; i++) {
-          dots[i].className = dots[i].className.replace(" active_img", "");
-      }
-      slides[slideIndex-1].style.display = "block";  
-      dots[slideIndex-1].className += " active_img";
-    }
-    </script>
+
 {% endblock %}

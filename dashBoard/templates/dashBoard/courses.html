@@ -29,7 +29,7 @@
                                       <div class="card course-item" >
                                           <img class="img-fluid" alt="100%x280" src="{{ fundraiser.campaign_photo.url }}">
                                           <div class="card-body course-content ">
-                                              <h3><a href="#">{{ fundraiser.campaign_name }}</a></h3>
+                                              <h3><a href="{% url 'fundraiser_page' fundraiser.campaign_url %}">{{ fundraiser.campaign_name }}</a></h3>
                                               <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <p class="price"><i class="fa fa-inr"></i><span style="font-weight: bold;">{{ fundraiser.amount_needed }}</span></p>
                                               </div>
@@ -48,8 +48,8 @@
                                               </div>
                                               <div class="col-md-20 mb-4">
 
-                                                <a href="courses.html" role="button" class="btn btn-primary"><i class="bi bi-share-fill pr-2 aria-hidden=true"></i>SHARE</a>
-                                                <button type="button" class="btn btn-primary"><i class="bi bi-suit-heart-fill pr-2 aria-hidden=true"></i>DONATE</button>
+                                                <a href="#" role="button" class="btn btn-primary"><i class="bi bi-share-fill pr-2 aria-hidden=true"></i>SHARE</a>
+                                                <a href="{% url 'fundraiser_page' fundraiser.campaign_url %}" ><button type="button" class="btn btn-primary"><i class="bi bi-suit-heart-fill pr-2 aria-hidden=true"></i>DONATE</button></a>
                                                 &nbsp;
                                                 &nbsp;
                                                   <i class="bx bx-user"></i>&nbsp;20
