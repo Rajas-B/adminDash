@@ -1,4 +1,3 @@
-from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -9,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 import stripe
 from dashBoard.vendor.twilio_otp import otp_auth  
 from django.conf import settings
+from urllib.parse import quote_plus
 
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
@@ -32,7 +32,7 @@ def contact(request):
     return render(request, 'dashBoard/contact.html')
 
 def courses(request):
-    fundraiser = Fundraiser.objects.filter(soft_delete=False, completed=False)
+    fundraiser = Fundraiser.objects.filter(completed=False)
     fundraiser = fundraiser.order_by("-start_date").all()
     fundraisers = []
     i = 0
@@ -58,7 +58,7 @@ def mediangels(request):
             request.session["donor"] = donor.pk
             return HttpResponseRedirect(reverse("home"))
         else:
-            return render(request, "mail/login.html", {
+            return render(request, "dashBoard/mediangels.html", {
                 "message": "Invalid email and/or password."
             })
     return render(request, 'dashBoard/mediangels.html')
@@ -111,23 +111,19 @@ def consent(request):
                     medical_report[i].name = medical_report[i].name.split('.')[0] + f'_{i}.' + medical_report[i].name.split('.')[-1]
                 for i in range(len(operation_bill)):
                     operation_bill[i].name = operation_bill[i].name.split('.')[0] + f'_{i}.' + operation_bill[i].name.split('.')[-1]
-                try:
-                    fundraiser = Fundraiser.objects.create(campaign_name = fundraiser_auth["campaign_name"], phone_number = fundraiser_auth["phone"], email = fundraiser_auth["email"],aadhar_number = fundraiser_auth["aadhar"],patient_name = fundraiser_auth["patient_name"], relation_to_patient = fundraiser_auth["rel_to_patient"], patient_rel_name=fundraiser_auth["name"], campaign_description=fundraiser_auth["description"], campaign_photo = main_pic, medical_treatment=fundraiser_auth["medical_treatment"],amount_needed=fundraiser_auth["amount_needed"], video_url=fundraiser_auth["video_url"])
-                    fundraiser.save()
-                    for image in other_pics:
-                        pics = Photos.objects.create(fundraiser = fundraiser, photo = image, pic_or_doc=False)
-                        pics.save()
-                    for image in medical_report:
-                        pics = Photos.objects.create(fundraiser=fundraiser, photo=image, pic_or_doc=True)
-                        pics.save()
-                    for image in operation_bill:
-                        pics = Photos.objects.create(fundraiser=fundraiser, photo=image, pic_or_doc=True)
-                        pics.save()
-                    return HttpResponseRedirect(reverse('home'))
-                except:
-                    return render(request, 'dashBoard/consent.hmtl', {
-                        'database_error': 'Oops! Something went wrong.'
-                    })
+                fundraiser = Fundraiser.objects.create(campaign_name = fundraiser_auth["campaign_name"], phone_number = fundraiser_auth["phone"], email = fundraiser_auth["email"],aadhar_number = fundraiser_auth["aadhar"],patient_name = fundraiser_auth["patient_name"], relation_to_patient = fundraiser_auth["rel_to_patient"], patient_rel_name=fundraiser_auth["name"], campaign_description=fundraiser_auth["description"], campaign_photo = main_pic, medical_treatment=fundraiser_auth["medical_treatment"],amount_needed=int(fundraiser_auth["amount_needed"]), video_url=fundraiser_auth["video_url"])
+                fundraiser.save()
+                for image in other_pics:
+                    pics = Photos.objects.create(fundraiser = fundraiser, photo = image, pic_or_doc=False)
+                    pics.save()
+                for image in medical_report:
+                    pics = Photos.objects.create(fundraiser=fundraiser, photo=image, pic_or_doc=True)
+                    pics.save()
+                for image in operation_bill:
+                    pics = Photos.objects.create(fundraiser=fundraiser, photo=image, pic_or_doc=True)
+                    pics.save()
+                return HttpResponseRedirect(reverse('home'))
+
             else:
                 return render(request, 'dashBoard/consent.html', {
                     "otp_error": "OTP does not match"
@@ -186,13 +182,14 @@ def fundraiser_page(request, campaign):
     photos = Photos.objects.filter(fundraiser = fundraiser, pic_or_doc=False)
     payment = Payments.objects.filter(fundraiser=fundraiser)
     payment = payment.order_by("-amount").all()
+    share_string = quote_plus(fundraiser.campaign_name)
     if payment.count() >= 3:
         top_donors = payment[:3]
     else:
         top_donors = payment
     context = {
         'fundraiser': fundraiser, 'photos': photos, 'number': range(1, len(photos)+1), 'donations': payment.count(),
-        'top_donors': top_donors
+        'top_donors': top_donors, 'share_string': share_string,
     }
     if 'donor' in request.session:
         donor = Donor.objects.get(pk=request.session["donor"])
@@ -322,7 +319,6 @@ def payment_cancelled(request):
 def mediangel_logout(request):
     if 'donor' in request.session:
         logout(request)
-        del request.session['donor']
         return HttpResponseRedirect(reverse('home'))
     return HttpResponseRedirect(reverse('home'))
 # Test views

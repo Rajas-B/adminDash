@@ -55,7 +55,10 @@
 
         <div class="d-grid gap-2 d-md-block">
           <a href = "#payment" class="btn btn-primary" role="button">Donate Now</a>
-          <a href = "index.html" class="btn btn-primary" role="button">Share</a>
+          <a href = "https://www.facebook.com/sharer.php?u={{ request.build_absolute_uri }}" role="button"><ion-icon class="share_links" name="logo-facebook"></ion-icon></a>
+          <a href="https://api.whatsapp.com/send?text={{ share_string }} {{ request.build_absolute_uri }}"><ion-icon class="share_links" name="logo-whatsapp"></ion-icon></a>
+          <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}&title={{ share_string }}"><ion-icon class="share_links" name="logo-linkedin"></ion-icon></a>
+          <a href="https://twitter.com/share?url={{ request.build_absolute_uri }}&text={{ share_string }}&via=&hashtags="><ion-icon class="share_links" name="logo-twitter"></ion-icon></a>
         </div>
 
         
@@ -426,7 +429,9 @@
   position: absolute;
   top: 0;
 }
-
+.share_links{
+  font-size: 30px;
+}
 /* The dots/bullets/indicators */
 .dot {
   cursor: pointer;
@@ -465,6 +470,7 @@
 @media only screen and (max-width: 300px) {
   .prev, .next,.text {font-size: 11px}
 }
+
   </style>
   <script>
     $(function() {
