@@ -4,7 +4,7 @@
 <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex justify-content-center align-items-center">
     <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100">
-      <h1>Fundraising for people and causes you<br>care about</h1>
+      <h1>Give <u>Your Care</u>To Show<br><u>You Care</u></h1>
       <!--<h2>We are team of talented designers making websites with Bootstrap</h2> -->
       <a href="{% url 'courses' %}" class="btn-get-started">Browse Fundraisers</a>
       <a href="{% url 'start-fundraiser' %}" class="btn-get-started">Start your own fundraiser</a>
@@ -19,7 +19,7 @@
 
         <div class="section-title">
           <h2>About</h2>
-          <a href="about.html"><p>About Us</p></a>
+          <a href="{% url 'about' %}"><p>About Us</p></a>
         </div>
 
         <div class="row">
@@ -27,10 +27,9 @@
             <img src="{% static 'dashBoard/assets/img/about.jpg' %}" class="img-fluid" alt="">
           </div>
           <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-            <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
             <p class="font-italic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
+              Fundraising for medical treatment is largely online in India and for patients with late stage disease with very visible symptoms. Some platforms are working on online fundraisers for only children, but again late stage disease. The number of cases accepted is only one out of ten if not one out of twenty. This leaves a large majority of patients with no option than to give up treatment or fend for themselves. There are no funding, financial access options available for this large majority of patients that get rejected by online platforms. We are hoping to build a corpus to help these patients with funding options to help them get treated. We  envisage a healthcare landscape where finances for treatment are available to one and all irrespective of strategies, privileges, inequalities.
+
             </p>
             <ul>
               <li><i class="icofont-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
@@ -40,7 +39,7 @@
             <p>
               Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
             </p>
-            <a href="about.html" class="learn-more-btn">Learn More</a>
+            <a href="{% url 'about' %}" class="learn-more-btn">Learn More</a>
           </div>
         </div>
 

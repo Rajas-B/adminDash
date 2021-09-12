@@ -328,7 +328,10 @@ def test(request):
         image = request.session['image']
         return render(request, 'dashBoard/test.html', context = {'image': image})
     return render(request, 'dashBoard/test.html', context = {'image': 'Lol'})
+
 # Footer views
+def about(request):
+    return render(request, 'dashBoard/about.html')
 
 def faq(request):
     return render(request, 'dashBoard/faq.html')

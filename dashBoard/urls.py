@@ -24,6 +24,7 @@ urlpatterns = [
     path("privacy-policy", views.privacy, name="privacy-policy"),
     path("refund-policy", views.refund, name="refund-policy"),
     path("terms-of-service", views.terms, name="terms-of-service"),
+    path("about", views.about, name="about"),
 
     # test urls
     path("test", views.test, name="test"),
