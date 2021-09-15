@@ -48,6 +48,8 @@ def courses(request):
     })
 
 def mediangels(request):
+    if 'donor' in request.session:
+        return HttpResponseRedirect(reverse('home'))
     if request.method == "POST":
         name = request.POST["username"]
         password = request.POST["password"]
