@@ -32,7 +32,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
        'http://localhost:8000',
 )
-
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 
 # Application definition
@@ -130,13 +131,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
 
 STRIPE_PUBLIC_KEY = ""
-STRIPE_PRIVATE_KEY = "sk_test_51JSc3iSHZnj3dlbcQLy8C6IvDKAfCqjudU2H4UayYPZF65LcS2A8GliZlK5OqwHRuWt3cugZpjaKEKPtTT3shS4D00QP2ooIn6"
+STRIPE_PRIVATE_KEY = "sk_test_51IkmSNSFJkczFVt0SK2RCNEIeC3HhsRLeR9kWzSsn5Ye5GgCoe6m33kwoFnHv5JVpxSwMaTyYqjcZcSTp3Z4pfk400UmclcKO4"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
